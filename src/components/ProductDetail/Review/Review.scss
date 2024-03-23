@@ -1,0 +1,41 @@
+.review {
+    margin: 40px 0px;
+    .stackreview{
+        .review-name {
+            margin: 20px 0px;
+        }
+        .stack1review{
+
+        }
+        .stack2review{
+            margin-right: 50px;
+            .forname{
+                color: #5A7184;
+                font-size: 14px;
+            }
+
+            .bothreview {
+
+                .iconstar {
+                    width: 23px;
+                    height: 23px;
+                    color:#EEC200;
+                }
+
+                .view5 {
+                    font-size: 22px;
+                    font-family: var(--font-family-rubik);
+                   
+                }
+            }
+           
+
+        }
+        
+        .stack3review{
+        }
+    }
+    
+    
+   
+}

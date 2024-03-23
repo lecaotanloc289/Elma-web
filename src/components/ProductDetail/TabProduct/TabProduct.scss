@@ -1,0 +1,12 @@
+.tabproduct{
+    .stacktab{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        
+        .tabicon{
+            margin-right: 5px;
+        }
+    }
+
+}

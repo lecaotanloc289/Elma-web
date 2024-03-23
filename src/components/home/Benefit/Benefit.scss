@@ -1,0 +1,26 @@
+.benefit {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    max-height: 200px;
+
+    .stack {
+        display: flex !important;
+        justify-content: space-around;
+        align-items: center;
+
+        .name {
+            font-family: var(--font-family-rubik);
+            font-size: 18px;
+            letter-spacing: 0.20000000298023224px;
+            line-height: 20px;
+        }
+
+        .icon {
+            width: 35px;
+            height: 35px;
+            color: #5C6AC4;
+        }
+    }
+}
+

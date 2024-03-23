@@ -1,0 +1,56 @@
+@import '../../styles/global.scss';
+
+.header-1 {
+    display: flex;
+    justify-content: space-between;
+    margin: 4px 0;
+    padding: 0px;
+    .image-language {
+        height: 18px;
+    }
+}
+.navbar-top {
+    display: flex;
+    justify-content: space-between;
+    height: 24px;
+    margin: 12px auto;
+}
+
+.tools-support {
+    display: flex;
+    padding:4px;
+
+    h7 {
+        
+    }
+    a {
+        text-decoration: none;
+        font-weight: 500;
+        p { 
+            margin: 0;
+            color: $dark-lighter;
+        }
+    }
+    p {
+        margin: 0;
+            color: $dark-lighter;
+
+    }
+    us {
+        padding-top: -10px;
+    }
+    a, p, img {
+        margin-left: 12px;
+    }
+}
+
+.icon-glyph {
+    a {
+        img {
+            margin-right: 10px;
+        }
+    }
+}
+
+
+

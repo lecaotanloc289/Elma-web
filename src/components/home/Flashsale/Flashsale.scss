@@ -1,0 +1,62 @@
+.flashsale {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+
+    .container {
+        
+        width: 1110px;
+        height: 338px;
+        background-color: #EDF9F9;
+        padding: 0 50px;
+        justify-content: space-between;
+
+        .stack1 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 360px;
+            height: 350px;
+             
+            img {
+                size: 100%;
+            }
+
+            
+        }
+
+        .stack2 {
+            max-width: 500px;
+            
+            .tag {
+                color: #47C1BF;
+                font-weight: 100 !important;
+            }
+    
+            .nametag {
+                font-size: 36px !important;
+            }
+    
+            .contenttag {
+                line-height: 1.5;
+            }
+    
+            .btn1 {
+                width: 170;
+                height: 48px;
+                background-color: #5C6AC4;
+            }
+            .light-through {
+                text-decoration: line-through; 
+                color: #959EAD;
+                
+            }
+    
+            
+    
+    
+        }
+    
+
+    }
+}

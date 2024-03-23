@@ -1,0 +1,47 @@
+@import '../../styles/global.scss';
+.category-1 {
+    height: 260px;
+    background-color: var(--lighter);
+}
+.category-11 {
+    margin: -200px auto 40px;
+    .card-item {
+        margin: 24px 0;
+        padding: 20px;
+        width: 350px;
+        box-shadow: none;
+        border: 1px solid $light-fill-indigo;
+        .flex-space-between {
+            .chev-icon {
+                width: 22px;
+                height: 22px;
+                margin-top: -2px;
+                color: gray;
+            }
+            .category-name {
+                margin-left: 8px;
+            }
+        }
+
+        .number-items {
+            margin: 7px 0;
+        }
+
+        .card-item-img {
+            // background-color: $light-fill-teal;
+            height: 180px;
+            margin: 0px auto;
+            padding: 20px 90px;
+            
+        }
+    }
+    .flex-column.center.header-brand {
+       margin: 28px 0;
+      
+    }
+
+    .flex-column.center img {
+        width: 256px;
+        height: 160px;
+    }
+}

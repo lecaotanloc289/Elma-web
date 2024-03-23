@@ -1,0 +1,101 @@
+.productdetail {
+    .cardcontainer{
+        .stack1{
+            .img-product{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 445px;
+                height: 345px;
+
+                .imagecard{
+                    width: 435px;
+                    height: 304px;
+                }
+                
+            }
+            .img-detail{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                .imagedetail {
+                    width: 130px;
+                    height: 110px;
+    
+                    .image-detail{
+                        width: 100px;
+                        height: 74px;
+                    }
+                }
+            }
+            
+        }
+
+        .stack2 {
+            width: 541px;
+            .title {
+                color: #161D25;
+                font-family: var(--font-family-rubik);
+                font-size: 36px;
+                font-weight: 700;
+                letter-spacing: 0.20000000298023224px;
+                line-height: 40px;
+            }
+
+            .info {
+                display: flex;
+                align-items: center;
+
+                .inforbuy {
+                    color: #fff;
+                    padding: 5px 7px;
+                    background-color: #F49342;
+                    border-radius: 10px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin-right: 20px;
+
+                    .iconstar {
+                        margin-right: 5px;
+                    }
+                }
+
+                p{
+                    margin-right: 20px;
+                }
+            }
+
+            .stack3 {
+                margin: 15px 0px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                .btn1 {
+                    width: 160;
+                    height: 48px;
+                    background-color: #5C6AC4;
+                }
+        
+                .learn-more {
+                    width: 160;
+                    height: 48px;
+                    border-color: #5C6AC4;
+                }
+
+                .normal {
+                    margin-right: 10px;
+                }
+            }
+
+            .stack4 {
+                margin: 25px 0px;
+                .p {
+                    // display: flex;
+                    // justify-content: center;
+                    // align-items: center;
+                }
+            }
+        }
+    }
+}

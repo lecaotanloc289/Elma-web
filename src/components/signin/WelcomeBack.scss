@@ -1,0 +1,44 @@
+@import '../../styles/global.scss';
+
+.welcome-back {
+    margin: 40px auto;
+}
+.benefits-item {
+    padding: 20px;
+    margin: 20px;
+}
+
+.check-stay-signin {
+    span {
+        font-family: var(--font-family-rubik);
+        font-size: 14px;
+        line-height: 20px;
+        color: $dark-title;
+
+    }
+}
+
+.or {
+    margin: 12px 20px;
+}
+
+.register-btn {
+    padding: 0 50px;
+}
+
+.brand {
+    margin: 50px 0;
+    .leading-brand {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+
+        p {
+            margin: 20px 0;
+        }
+    }
+}
+
+.benefits {
+    margin-left: -8px;
+}

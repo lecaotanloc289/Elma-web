@@ -1,0 +1,50 @@
+@import '../../styles/global.scss';
+.footer-top {
+    background-color: $lighter;
+    padding: 12px;
+
+}
+.footer-bottom {
+    background-color: $enoughlight;
+
+}
+.footer {
+    /* padding: 0; */
+
+    .footer-1 {
+        width: 100vw;
+        padding: 0;
+
+        .footer-menu {
+            margin-top: 10px;
+
+            a {
+                color: black;
+                margin: 12px 0;
+                cursor: pointer;
+                text-decoration: none;
+            }
+        }
+
+    }
+
+    .footer-2 {
+        width: 100vw;
+        padding: 0;
+        height: 64px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .copyright {
+            font-size: 14px;
+        }
+    }
+
+}
+
+
+
+
+.button {
+    background-color: aquamarine;
+}

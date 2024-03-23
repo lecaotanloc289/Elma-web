@@ -1,0 +1,54 @@
+.banner {
+    display: flex !important;
+    justify-content: space-around;
+    align-items: center;
+    .stack1 {
+        max-width: 500px;
+        
+        .tag {
+            color: #47C1BF;
+            font-weight: 100 !important;
+        }
+
+        .nametag {
+            font-size: 56px !important;
+        }
+
+        .contenttag {
+            line-height: 1.5;
+        }
+
+        .btn1 {
+            width: 160;
+            height: 48px;
+            background-color: #5C6AC4;
+        }
+
+        .learn-more {
+            width: 160;
+            height: 48px;
+            border-color: #5C6AC4;
+        }
+
+
+    }
+
+    .stack2 {
+        .img {
+            width: 402px;
+            height: 467px;
+        }
+
+    }
+    .arrow {
+        width: 64px;
+        height: 64px;
+        border-radius: 45px;
+    
+    .icon {
+        color: #161D25;
+        width: 26px;
+        height: 26px;
+        }
+    }
+}
