@@ -33,3 +33,29 @@ export const signInAndLoadUserData = (data) => {
         }
     };
 };
+
+export const signInWithGoogle = (profile) => {
+    console.log(profile);
+    return async (dispatch) => {
+        const apiSignIn = `${API_PUBLIC_URL}google/signin`;
+        try {
+            const response = await axios.post(apiSignIn, {
+                id: profile.id,
+                name: profile.name,
+                picture: profile.picture,
+                email: profile.email,
+                family_name: profile.family_name,
+                given_name: profile.given_name,
+                locate: profile.locate,
+                verified_email: profile.verified_email,
+            });
+            if (response.status === 200) {
+                console.log("Login with google successful!");
+                dispatch(loginSuccess(response.data));
+            } else console.log("Error login with google ", response.status);
+        } catch (error) {
+            dispatch(loginFailure(error.response));
+            console.log("Error login with Google: ", error);
+        }
+    };
+};

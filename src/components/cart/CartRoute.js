@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import ShippingPayment from "./ShippingPayment";
 import { CartCustomerInfo } from "./CartCustomerInfo";
 import Review from "./Review";
-import { Box, Step, StepButton, Stepper } from "@mui/material";
+import { Box, Card, Step, StepButton, Stepper } from "@mui/material";
 import { CartBody } from "./CartBody";
 export function CartRoute() {
     const userData = useSelector((state) => state.auth.userData);
@@ -86,9 +86,9 @@ export function CartRoute() {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    const handleStep = (step) => () => {
-        setActiveStep(step);
-    };
+    // const handleStep = (step) => () => {
+    //     setActiveStep(step);
+    // };
 
     const handleComplete = () => {
         const newCompleted = completed;
@@ -96,26 +96,36 @@ export function CartRoute() {
         setCompleted(newCompleted);
         handleNext();
     };
-
-    const handleReset = () => {
-        setActiveStep(0);
-        setCompleted({});
-    };
-
     return (
         <Box className="cartRoute1">
-            <Stepper className="cartRoute2" nonLinear activeStep={activeStep}>
-                {steps.map((step, index) => (
-                    <Step className="cartRoute3" completed={completed[index]}>
-                        <StepButton
-                            className="cartRoute4"
-                            onClick={handleStep(index)}
+            <Card
+                className="non-box-shadow"
+                style={{
+                    height: 40,
+                    borderRadius: 8,
+                }}
+            >
+                <Stepper
+                    className="cartRoute2"
+                    style={{ margin: 10 }}
+                    nonLinear
+                    activeStep={activeStep}
+                >
+                    {steps.map((step, index) => (
+                        <Step
+                            className="cartRoute3"
+                            completed={completed[index]}
                         >
-                            {step.label}
-                        </StepButton>
-                    </Step>
-                ))}
-            </Stepper>
+                            <StepButton
+                                className="cartRoute4"
+                                // onClick={handleStep(index)}
+                            >
+                                {step.label}
+                            </StepButton>
+                        </Step>
+                    ))}
+                </Stepper>
+            </Card>
             <Box>{steps[activeStep].component}</Box>
         </Box>
     );

@@ -1,7 +1,6 @@
 import axios from "axios";
 import { API_PUBLIC_URL } from "./config";
 import queryString from "query-string";
-import { useState } from "react";
 
 export const toggleFavorite = async (userId, productId) => {
     const isAuthenticated = localStorage.getItem("isAuthenticated");

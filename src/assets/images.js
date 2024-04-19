@@ -52,4 +52,6 @@ export const images = {
     Programing: require("./images/Programing.png"),
     WebAppProgressive: require("./images/WebAppProgressive.png"),
     EmptyCart: require("./images/EmptyCart.png"),
+    SlideRegister: require("./images/002.png"),
+    SlideSignIn: require("./images/001.png"),
 };

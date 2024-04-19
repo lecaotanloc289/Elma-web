@@ -65,14 +65,16 @@ export const fetchSearchResultsSuccess = (results) => ({
 
 export const fetchSearchResults = (term) => {
     return async (dispatch) => {
-        try {
-            const response = await axios.get(
-                `${API_PUBLIC_URL}products/search?key=${term}`,
-            );
-            const results = response.data;
-            dispatch(fetchSearchResultsSuccess(results));
-        } catch (error) {
-            console.error("Error fetching search results:", error);
+        if (term !== null) {
+            try {
+                const response = await axios.get(
+                    `${API_PUBLIC_URL}products/search?key=${term}`,
+                );
+                const results = response.data;
+                dispatch(fetchSearchResultsSuccess(results));
+            } catch (error) {
+                console.error("Error fetching search results:", error);
+            }
         }
     };
 };

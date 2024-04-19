@@ -2,28 +2,28 @@ import React from "react";
 import "./Descriptions.scss";
 import { Container, Grid, Stack, Typography } from "@mui/material";
 
-const items = [
-    {
-        viewname: "Brand",
-        viewcontent: "Sony Alpha 7 Mark II",
-    },
-    {
-        viewname: "Resolution",
-        viewcontent: "42MP Full-Frame Exmor R BSI CMOS Sensor",
-    },
-    {
-        viewname: "Video",
-        viewcontent: "UHD 4K30p Video with HLG & S-Log3 Gammas",
-    },
-    {
-        viewname: "Connectivity",
-        viewcontent: "Built-In Wi-Fi/Bluetooth, Dual SD Slots",
-    },
-    {
-        viewname: "Screen",
-        viewcontent: "3.69m-Dot Tru-Finder OLED EVF",
-    },
-];
+// const items = [
+//     {
+//         viewname: "Brand",
+//         viewcontent: "Sony Alpha 7 Mark II",
+//     },
+//     {
+//         viewname: "Resolution",
+//         viewcontent: "42MP Full-Frame Exmor R BSI CMOS Sensor",
+//     },
+//     {
+//         viewname: "Video",
+//         viewcontent: "UHD 4K30p Video with HLG & S-Log3 Gammas",
+//     },
+//     {
+//         viewname: "Connectivity",
+//         viewcontent: "Built-In Wi-Fi/Bluetooth, Dual SD Slots",
+//     },
+//     {
+//         viewname: "Screen",
+//         viewcontent: "3.69m-Dot Tru-Finder OLED EVF",
+//     },
+// ];
 
 const Descriptions = (data) => {
     const item = data.data;

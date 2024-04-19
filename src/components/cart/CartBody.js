@@ -3,6 +3,7 @@ import { Star } from "@mui/icons-material";
 import {
     Alert,
     Button,
+    Card,
     CardActionArea,
     Checkbox,
     Container,
@@ -36,7 +37,7 @@ import { useNavigate } from "react-router-dom";
 export function CartBody({ handleComplete }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [discount, setDiscount] = useState(0);
+    const discount = 0;
     const userData = useSelector((state) => state.auth.userData);
     let userId;
     if (userData) userId = userData.id;
@@ -57,13 +58,19 @@ export function CartBody({ handleComplete }) {
         dispatch(fetchCart(userId));
     };
 
-    const handleDecrease = async (productId) => {
+    const handleDecrease = (productId) => {
         const product = {
-            userId: userId,
-            productId: productId,
+            userId: "",
+            productId: "",
         };
-        await dispatch(decreaseQuantity(product));
-        dispatch(fetchCart(userId));
+        products.forEach(async (item) => {
+            if (item.productId._id === productId && item.quantity > 1) {
+                product.userId = userId;
+                product.productId = productId;
+                await dispatch(decreaseQuantity(product));
+                dispatch(fetchCart(userId));
+            }
+        });
     };
 
     // CONFIRM DELETE PRODUCT FROM CART
@@ -72,12 +79,10 @@ export function CartBody({ handleComplete }) {
             userId: userId,
             productId: productId,
         };
-        await dispatch(removeFromCart(product));
+        dispatch(removeFromCart(product));
         handleCloseDialog(productId);
     };
-
     const [openDialogs, setOpenDialogs] = useState({});
-
     // open dialog
     const handleOpenDialog = (productId) => {
         setOpenDialogs((prevState) => ({
@@ -85,7 +90,6 @@ export function CartBody({ handleComplete }) {
             [productId]: true,
         }));
     };
-
     // close dialog
     const handleCloseDialog = (productId) => {
         setOpenDialogs((prevState) => ({
@@ -117,6 +121,7 @@ export function CartBody({ handleComplete }) {
             setOpenAdd(false);
         }, 3000);
     };
+
     // SAVE SELECTED PRODUCT AND RE-RENDER CHECKBOX
     const storedSelectedProducts = JSON.parse(
         localStorage.getItem("selectedProducts"),
@@ -129,25 +134,6 @@ export function CartBody({ handleComplete }) {
     const [selectAll, setSelectAll] = useState(
         storedSelectedProducts?.length === products.length,
     );
-
-    useEffect(() => {
-        const storedSelectedProductIds = storedSelectedProducts.map(
-            (product) => product.productId._id,
-        );
-        setSelectAll(
-            selectedProducts.length === products.length &&
-                products.every((product) =>
-                    selectedProducts.includes(product.productId._id),
-                ),
-        );
-
-        // Check the checkboxes for products in localStorage
-        storedSelectedProductIds.forEach((productId) => {
-            if (!selectedProducts.includes(productId)) {
-                handleCheckboxChange(productId);
-            }
-        });
-    }, [selectedProducts, storedSelectedProducts, products]);
 
     // checkbox change state
     const handleCheckboxChange = (productId) => {
@@ -214,11 +200,6 @@ export function CartBody({ handleComplete }) {
     // get note and render
     const note = useSelector((state) => state.notes.note);
 
-    // get quantity of product and render emtpy cart
-    let quantity;
-    if (cart && cart.products) {
-        quantity = cart.products.length;
-    }
     return (
         <Container maxWidth="lg">
             {/* NOTIFICATION ADD CART */}
@@ -236,163 +217,201 @@ export function CartBody({ handleComplete }) {
                     Add product to cart success!
                 </Alert>
             </Snackbar>
-
+            {/* width: fit-content;
+    height: max-content;
+    margin-left: -24px;
+    padding-left: 28px;
+    margin-right: 36px; */}
             {/* PRODUCT IN CART & VOUCHER & TOTAL SUMMARY*/}
-            <Stack direction={"row"} className="flex-space-between">
+            <Stack direction={"row"} spacing={4} className="flex-space-between">
                 {/* PRODUCT IN CART  */}
-                <Stack className="mg40" spacing={4}>
-                    <div className="">
-                        <Checkbox
-                            className="checkbox"
-                            size="large"
-                            name="selectAll"
-                            id="selectAll"
-                            checked={selectAll}
-                            onChange={handleSelectAllChange}
-                        />
-                        <label
-                            className="h6 regular dark-title"
-                            style={{ cursor: "pointer" }}
-                            htmlFor="selectAll"
-                        >
-                            Select all
-                        </label>
-                    </div>
-                    {products ? (
-                        products.map((i, index) => (
-                            <div className="cart-product">
-                                <Grid container spacing={2} className="center">
-                                    <Grid className="flex-row" xs={3}>
-                                        <Checkbox
-                                            className="checkbox"
-                                            size="large"
-                                            checked={selectedProducts?.includes(
-                                                i.productId._id,
-                                            )}
-                                            onChange={() =>
-                                                handleCheckboxChange(
+                <Card
+                    className="non-box-shadow mg40"
+                    style={{
+                        margin: "40px 24px 40px -24px",
+                        padding: "10px 20px 0 30px",
+                    }}
+                >
+                    <Stack className="" spacing={4}>
+                        <div className="">
+                            <Checkbox
+                                className="checkbox"
+                                size="large"
+                                name="selectAll"
+                                id="selectAll"
+                                checked={selectAll}
+                                onChange={handleSelectAllChange}
+                            />
+                            <label
+                                className="h6 regular dark-title"
+                                style={{ cursor: "pointer" }}
+                                htmlFor="selectAll"
+                            >
+                                Select all
+                            </label>
+                        </div>
+                        {products ? (
+                            products.map((i) => (
+                                <div className="cart-product">
+                                    <Grid
+                                        container
+                                        spacing={2}
+                                        className="center"
+                                    >
+                                        <Grid className="flex-row" xs={3}>
+                                            <Checkbox
+                                                className="checkbox"
+                                                size="large"
+                                                checked={selectedProducts?.includes(
                                                     i.productId._id,
-                                                )
-                                            }
-                                        />
-                                        <div className="image-container center">
-                                            <img
-                                                width={120}
-                                                className="product-image"
-                                                src={i.productId.image}
-                                                alt=""
+                                                )}
+                                                onChange={() =>
+                                                    handleCheckboxChange(
+                                                        i.productId._id,
+                                                    )
+                                                }
                                             />
-                                        </div>
-                                    </Grid>
-                                    <Grid xs={4}>
-                                        <div>
-                                            <p className="h7 medium dark-title">
-                                                {i.productId.name}
+                                            <div className="image-container center">
+                                                <img
+                                                    width={120}
+                                                    className="product-image"
+                                                    src={i.productId.image}
+                                                    alt=""
+                                                />
+                                            </div>
+                                        </Grid>
+                                        <Grid xs={4}>
+                                            <div>
+                                                <p className="h7 medium dark-title">
+                                                    {i.productId.name}
+                                                </p>
+                                                <p className="h8 regular dark-lightest95">
+                                                    {i.productId.brand}
+                                                </p>
+                                            </div>
+                                        </Grid>
+                                        <Grid xs={2}>
+                                            <p
+                                                style={{ lineHeight: "32px" }}
+                                                className="h7 medium green product-price"
+                                            >
+                                                {formattedNumber(
+                                                    i.productId.price,
+                                                )}
                                             </p>
-                                            <p className="h8 regular dark-lightest95">
-                                                {i.productId.brand}
-                                            </p>
-                                        </div>
-                                    </Grid>
-                                    <Grid xs={2}>
-                                        <p
-                                            style={{ lineHeight: "32px" }}
-                                            className="h7 medium green product-price"
-                                        >
-                                            {formattedNumber(i.productId.price)}
-                                        </p>
-                                    </Grid>
-                                    <Grid xs={2}>
-                                        <Stack spacing={1} direction={"row"}>
+                                        </Grid>
+                                        <Grid xs={2}>
+                                            <Stack
+                                                spacing={1}
+                                                direction={"row"}
+                                            >
+                                                <IconButton
+                                                    onClick={() =>
+                                                        handleDecrease(
+                                                            i.productId._id,
+                                                        )
+                                                    }
+                                                >
+                                                    <img
+                                                        src={icons.Minus}
+                                                        alt=""
+                                                    />
+                                                </IconButton>
+                                                <p className="h8 medium dark-title product-quantity">
+                                                    {i.quantity}
+                                                </p>
+                                                <IconButton
+                                                    onClick={() =>
+                                                        handleIncrease(
+                                                            i.productId._id,
+                                                        )
+                                                    }
+                                                >
+                                                    <img
+                                                        src={icons.Add}
+                                                        alt=""
+                                                    />
+                                                </IconButton>
+                                            </Stack>
+                                        </Grid>
+                                        <Grid xs={1}>
                                             <IconButton
                                                 onClick={() =>
-                                                    handleDecrease(
+                                                    handleOpenDialog(
                                                         i.productId._id,
                                                     )
                                                 }
+                                                className="delete-product"
                                             >
-                                                <img src={icons.Minus} alt="" />
+                                                <img src={icons.Trash} alt="" />
                                             </IconButton>
-                                            <p className="h8 medium dark-title product-quantity">
-                                                {i.quantity}
-                                            </p>
-                                            <IconButton
-                                                onClick={() =>
-                                                    handleIncrease(
-                                                        i.productId._id,
-                                                    )
-                                                }
-                                            >
-                                                <img src={icons.Add} alt="" />
-                                            </IconButton>
-                                        </Stack>
+                                        </Grid>
                                     </Grid>
-                                    <Grid xs={1}>
-                                        <IconButton
-                                            onClick={() =>
-                                                handleOpenDialog(
-                                                    i.productId._id,
-                                                )
-                                            }
-                                            className="delete-product"
-                                        >
-                                            <img src={icons.Trash} alt="" />
-                                        </IconButton>
-                                    </Grid>
-                                </Grid>
 
-                                <Dialog
-                                    open={openDialogs[i.productId._id] || false}
-                                    onClose={() =>
-                                        handleCloseDialog(i.productId._id)
-                                    }
-                                    aria-labelledby="alert-dialog-title"
-                                    aria-describedby="alert-dialog-description"
-                                >
-                                    <DialogTitle id="alert-dialog-title">
-                                        <p className="h5 regular dark-title">
-                                            {"Confirm remove product?"}
-                                        </p>
-                                    </DialogTitle>
-                                    <DialogContent>
-                                        <DialogContentText
-                                            className="h6 regular dark-title"
-                                            id="alert-dialog-description"
-                                        >
-                                            <p className="h8 regular dark-title">
-                                                Are you sure remove{" "}
-                                                {i.productId.name}?
+                                    <Dialog
+                                        open={
+                                            openDialogs[i.productId._id] ||
+                                            false
+                                        }
+                                        onClose={() =>
+                                            handleCloseDialog(i.productId._id)
+                                        }
+                                        aria-labelledby="alert-dialog-title"
+                                        aria-describedby="alert-dialog-description"
+                                    >
+                                        <DialogTitle id="alert-dialog-title">
+                                            <p className="h5 regular dark-title">
+                                                {"Confirm remove product?"}
                                             </p>
-                                        </DialogContentText>
-                                    </DialogContent>
-                                    <DialogActions>
-                                        <Button
-                                            onClick={() =>
-                                                handleCloseDialog(
-                                                    i.productId._id,
-                                                )
-                                            }
-                                        >
-                                            Disagree
-                                        </Button>
-                                        <Button
-                                            onClick={() =>
-                                                handleDelete(i.productId._id)
-                                            }
-                                        >
-                                            Agree
-                                        </Button>
-                                    </DialogActions>
-                                </Dialog>
-                            </div>
-                        ))
-                    ) : (
-                        <> </>
-                    )}
-                </Stack>
+                                        </DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText
+                                                className="h6 regular dark-title"
+                                                id="alert-dialog-description"
+                                            >
+                                                <p className="h8 regular dark-title">
+                                                    Are you sure remove{" "}
+                                                    {i.productId.name}?
+                                                </p>
+                                            </DialogContentText>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button
+                                                onClick={() =>
+                                                    handleCloseDialog(
+                                                        i.productId._id,
+                                                    )
+                                                }
+                                            >
+                                                Disagree
+                                            </Button>
+                                            <Button
+                                                onClick={() =>
+                                                    handleDelete(
+                                                        i.productId._id,
+                                                    )
+                                                }
+                                            >
+                                                Agree
+                                            </Button>
+                                        </DialogActions>
+                                    </Dialog>
+                                </div>
+                            ))
+                        ) : (
+                            <> </>
+                        )}
+                    </Stack>
+                </Card>
 
                 {/* VOUCHER & TOTAL SUMMARY */}
-                <div>
+                <Card
+                    className="non-box-shadow mg40"
+                    style={{
+                        padding: 20,
+                        marginRight: -24,
+                    }}
+                >
                     <Stack spacing={3}>
                         <div>
                             <p className="h6 medium dark-title mg20">
@@ -490,7 +509,7 @@ export function CartBody({ handleComplete }) {
                             </Button>
                         )}
                     </Stack>
-                </div>
+                </Card>
             </Stack>
 
             {/* RECOMMEND PRODUCTS */}

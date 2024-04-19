@@ -79,12 +79,9 @@ hr.divider {
     position: relative;
     margin: 0 10px;
 
-    .center {
-    }
-
     .favorite-button {
         display: flex;
-        justify-content: end;
+        justify-content: flex-end;
         // position: absolute;
         right: 30px;
         top: 30px;
@@ -112,9 +109,6 @@ hr.divider {
     
 }
 
-.heart {
-   
-}
 .sale {
     align-items: center;
     justify-content: center;

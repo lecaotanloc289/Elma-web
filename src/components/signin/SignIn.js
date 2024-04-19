@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./SignIn.scss";
 import {
     Button,
@@ -13,12 +13,18 @@ import {
     Stack,
     TextField,
 } from "@mui/material";
-import { Close, Google } from "@mui/icons-material";
+import { Close } from "@mui/icons-material";
+import { FcGoogle } from "react-icons/fc";
 import logo from "../../assets/logo";
 import { useDispatch, useSelector } from "react-redux";
-import { signInAndLoadUserData } from "../../redux/actions/signInAction";
+import {
+    signInAndLoadUserData,
+    signInWithGoogle,
+} from "../../redux/actions/signInAction";
 import MainLayout from "../MainLayout";
 import { useNavigate } from "react-router-dom";
+import { googleLogout, useGoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 export default function SignIn() {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
     const navigate = useNavigate();
@@ -31,12 +37,16 @@ export default function SignIn() {
     const [notify, setNotify] = useState("");
 
     const handleClose = (event) => {
-        return;
+        setOpenSnackBar(false);
     };
-
     if (isAuthenticated) {
         navigate("/");
     }
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate("/");
+        }
+    }, [isAuthenticated, navigate]);
 
     const handleSignIn = async () => {
         if (email === "" && password_hash === "") {
@@ -64,6 +74,41 @@ export default function SignIn() {
             );
     };
 
+    // CREATING A USER PROFILE BASED ON THE USER'S GOOGLE PROFILE
+    const [user, setUser] = useState([]);
+    const [profile, setProfile] = useState([]);
+    const login = useGoogleLogin({
+        onSuccess: (codeResponse) => {
+            setUser(codeResponse);
+            console.log(profile);
+            dispatch(signInWithGoogle(profile));
+        },
+        onError: (error) => console.log("Login failed", error),
+    });
+
+    useEffect(() => {
+        if (user) {
+            axios
+                .get(
+                    `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${user.access_token}`,
+                            Accept: "application/json",
+                        },
+                    },
+                )
+                .then((response) => {
+                    setProfile(response.data);
+                })
+                .catch((error) => console.log(error));
+        }
+    }, [user]);
+
+    // const logOut = () => {
+    //     googleLogout();
+    //     setProfile(null);
+    // };
     const action = (
         <React.Fragment>
             <IconButton
@@ -76,6 +121,14 @@ export default function SignIn() {
             </IconButton>
         </React.Fragment>
     );
+    // const responseMessage = async (response) => {
+    //     // await axios.get(`${API_PUBLIC_URL}auth/google`);
+    //     console.log(response);
+    // };
+    // const errorMessage = (error) => {
+    //     console.log(error);
+    // };
+
     return (
         <MainLayout>
             {
@@ -87,6 +140,21 @@ export default function SignIn() {
                     action={action}
                 />
             }
+            {/* TEST FOR LOGIN WITH GOOGLE */}
+            {/* {profile !== null ? (
+                <div>
+                    <img src={profile.picture} alt="user image" />
+                    <h3>User Logged in</h3>
+                    <p>Name: {profile.name}</p>
+                    <p>Email Address: {profile.email}</p>
+                    <br />
+                    <br />
+                    <button onClick={logOut}>Log out</button>
+                </div>
+            ) : (
+                <button onClick={login}>Sign in with Google 🚀 </button>
+            )} */}
+
             <div className="signin">
                 <div className="signin-1"></div>
                 <div className="signin-2"></div>
@@ -106,17 +174,30 @@ export default function SignIn() {
                                         Register here &gt;
                                     </a>
                                 </Stack>
-                                <Stack direction={"row"} spacing={3}>
+                                <Stack
+                                    direction={"row"}
+                                    spacing={3}
+                                    className="flex-center center"
+                                >
+                                    {/* <GoogleLogin
+                                        onSuccess={responseMessage}
+                                        onError={errorMessage}
+                                        locale="en"
+                                        className="google-login"
+
+                                    /> */}
+
                                     <Button
-                                        className="register-with-gg radius-8  "
+                                        className="google-login radius-8  "
                                         fullWidth
-                                        variant="contained"
+                                        variant="outlined"
+                                        onClick={login}
                                         startIcon={
-                                            <Google className="gg-register" />
+                                            <FcGoogle className="gg-register" />
                                         }
                                     >
                                         <p className="normal h7 regular">
-                                            Register with Google
+                                            Signin with Google
                                         </p>
                                     </Button>
                                     <Button

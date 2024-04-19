@@ -41,10 +41,9 @@ const icons = {
     Healthy: require("./Icon/Healthy.png"),
     Phone: require("./Icon/Phone.png"),
     Flash: require("./Icon/Flash.png"),
-    
+
     MensFashion: require("./Icon/Mens fashion.png"),
     Dollar: require("./Icon/Dollar.png"),
-    Trash: require("./Icon/Trash.png"),
     Trash_red: require("./Icon/Delete-red.png"),
     Edit: require("./Icon/Edit.png"),
     Copy: require("./Icon/Copy.png"),

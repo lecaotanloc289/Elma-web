@@ -3,10 +3,12 @@ import React from "react";
 import { images } from "../../../assets/images";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import "./Banner.scss";
+// import SwipeableTextMobileStepper from "../../Slide";
 
 const Banner = () => {
     return (
         <Container className="banner" maxWidth="lg">
+            {/* <SwipeableTextMobileStepper /> */}
             <Stack className="stack1" spacing={3.5}>
                 <p className="tag h81 ">SONY WH-H910N</p>
                 <p className="nametag h2 medium">

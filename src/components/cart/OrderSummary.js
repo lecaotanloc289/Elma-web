@@ -1,11 +1,11 @@
-import { IconButton, Stack } from "@mui/material";
+import { Button, IconButton, Stack } from "@mui/material";
 import React from "react";
 import { formattedNumber } from "../../utils/appService";
 import icons from "../../assets/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCart, removeFromCart } from "../../redux/actions/cartAction";
 
-export default function Summary() {
+export function OrderSummary({ handleBack, handleComplete }) {
     const dispatch = useDispatch();
     const products = JSON.parse(localStorage.getItem("selectedProducts"));
     const total = products.reduce((total, product) => {
@@ -41,11 +41,7 @@ export default function Summary() {
 
     return (
         <div className="">
-            <p className="h5 medium dark-title">Order summary</p>
-            <p className="h8 regular dark-lightest95 mg10">
-                View your order items.
-            </p>
-            <Stack maxWidth={500} spacing={3}>
+            <Stack maxWidth={500} className="mg40" spacing={3}>
                 {products.map((item, index) => (
                     <Stack
                         spacing={3}
@@ -124,6 +120,21 @@ export default function Summary() {
                         </p>
                     </div>
                 </Stack>
+                <Button
+                    onClick={handleComplete}
+                    variant="contained"
+                    className="button-contained"
+                >
+                    {/* <img src={icons.Shipping_white} alt="" /> */}
+                    <p className="normal h7 medium white">Review</p>
+                </Button>
+                <Button
+                    onClick={handleBack}
+                    variant="outlined"
+                    className="button-outlined"
+                >
+                    <img src={icons.Arror_left} alt="" />
+                </Button>
             </Stack>
         </div>
     );

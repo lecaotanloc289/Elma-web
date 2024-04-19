@@ -28,6 +28,10 @@ export default function Cart() {
 
     return (
         <MainLayout>
+            <div
+                style={{ height: 350, marginBottom: -350 }}
+                className="white-fill-lighter"
+            ></div>
             {quantity > 0 ? (
                 <Container maxWidth="lg">
                     <CartHeader />

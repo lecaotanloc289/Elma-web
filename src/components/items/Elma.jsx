@@ -9,6 +9,7 @@ export default function Elma() {
             style={{ cursor: "pointer" }}
             onClick={() => navigate("/")}
             className="elma-logo"
+            href="/"
         >
             <img src={logo.Elma} alt="" />
         </a>

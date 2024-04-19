@@ -31,7 +31,7 @@ import { formattedNumber } from "../../utils/appService";
 import { useDispatch, useSelector } from "react-redux";
 import MainLayout from "../MainLayout";
 import { useNavigate } from "react-router-dom";
-import { addToCart, fetchCart } from "../../redux/actions/cartAction";
+import { addToCart } from "../../redux/actions/cartAction";
 
 function Search() {
     window.scrollTo(0, 0);
@@ -144,6 +144,7 @@ export function FilterOptions() {
                 <Stack spacing={2}>
                     <p className="h7 medium dark-title mgt4">Category</p>
                     {categories.map((item, index) => (
+                        // eslint-disable-next-line jsx-a11y/anchor-is-valid
                         <a
                             onClick={() => navigate(`categories/${item._id}`)}
                             style={{
@@ -267,90 +268,6 @@ export function Result() {
 }
 
 export function Store() {
-    // const store = [
-    //     {
-    //         name: "Apple Store Official",
-    //         logo: logo.Apple,
-    //         tag: "Featured store",
-    //         sold: "10,5k",
-    //         store_rating: 4.6,
-    //     },
-    // ];
-    // const products = [
-    //     {
-    //         image: images.Macbook1,
-    //         price: 1725,
-    //         name: "Macbook Pro 2018",
-    //         favorite: false,
-    //         name_store: "Apple Store Official",
-    //         rating: 4.6,
-    //     },
-    //     {
-    //         image: images.Macbook2,
-    //         price: 1725,
-    //         name: "Macbook Pro 2018",
-    //         favorite: false,
-    //         name_store: "Apple Store Official",
-    //         rating: 4.6,
-    //     },
-    //     {
-    //         image: images.Macbook3,
-    //         price: 1725,
-    //         name: 'Macbook Pro 16"',
-    //         favorite: false,
-    //         name_store: "Apple Store Official",
-    //         rating: 4.6,
-    //     },
-    //     {
-    //         image: images.Macbook3,
-    //         price: 1725,
-    //         name: "Macbook Pro touchbar",
-    //         favorite: false,
-    //         name_store: "Apple Store Official",
-    //         rating: 4.6,
-    //     },
-    //     {
-    //         image: images.Macbook2,
-    //         price: 1725,
-    //         name: "Macbook Pro MF840",
-    //         favorite: false,
-    //         name_store: "Apple Store Official",
-    //         rating: 4.6,
-    //     },
-    //     {
-    //         image: images.Macbook1,
-    //         price: 1725,
-    //         name: "Macbook Pro 2018",
-    //         favorite: false,
-    //         name_store: "Apple Store Official",
-    //         rating: 4.6,
-    //     },
-    //     {
-    //         image: images.Macbook2,
-    //         price: 1725,
-    //         name: "Macbook Pro 2018",
-    //         favorite: false,
-    //         name_store: "Apple Store Official",
-    //         rating: 4.6,
-    //     },
-    //     {
-    //         image: images.Macbook3,
-    //         price: 1725,
-    //         name: "Macbook Pro 2018",
-    //         favorite: false,
-    //         name_store: "Apple Store Official",
-    //         rating: 4.6,
-    //     },
-    //     {
-    //         image: images.Macbook1,
-    //         price: 1725,
-    //         name: "Macbook Pro 2018",
-    //         favorite: false,
-    //         name_store: "Apple Store Official",
-    //         rating: 4.6,
-    //     },
-    // ];
-
     // get user data from store
     const userData = useSelector((state) => state.auth.userData);
     let userId;
@@ -509,7 +426,7 @@ export function Store() {
                 </Alert>
             </Snackbar>
             <Grid rowSpacing={3} container flexWrap={"wrap"}>
-                {searchResults.map((i, ind) => (
+                {searchResults?.map((i, ind) => (
                     <Grid item xs={4}>
                         <Card
                             variant="outlined"

@@ -1,7 +1,7 @@
 import { Container, Rating, Stack } from "@mui/material";
 import React from "react";
 import "./Review.scss";
-import { Star, StarOutline } from "@mui/icons-material";
+import { Star } from "@mui/icons-material";
 
 const Review = (data) => {
     const item = data.data;
@@ -12,9 +12,7 @@ const Review = (data) => {
                 <p className="review-name dark-title h22">Review</p>
                 <Stack className="stack1review" direction={"row"}>
                     <Stack className="stack2review" spacing={2}>
-                        <p className="forname">
-                            for {item.name}
-                        </p>
+                        <p className="forname">for {item.name}</p>
                         <Stack
                             className="bothreview flex"
                             direction={"row"}

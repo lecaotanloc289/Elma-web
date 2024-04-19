@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import Banner from "./Banner/Banner";
 import Benefit from "./Benefit/Benefit";
 import Bestseller from "./Bestseller/Bestseller";
 import Flashsale from "./Flashsale/Flashsale";
@@ -8,6 +7,7 @@ import Productlist from "./Productlist/Productlist";
 import Blog from "./Blog/Blog";
 import Brand from "./Brand/Brand";
 import MainLayout from "../MainLayout";
+import Slide from "../Slide/Slide";
 
 const Home = () => {
     useEffect(() => {
@@ -15,7 +15,7 @@ const Home = () => {
     });
     return (
         <MainLayout>
-            <Banner />
+            <Slide />
             <Benefit />
             <Bestseller />
             <Flashsale />

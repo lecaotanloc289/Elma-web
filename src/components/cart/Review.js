@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import logo from "../../assets/logo";
 import {
     Avatar,
     Button,
+    Card,
     Container,
     FormControl,
     IconButton,
@@ -27,30 +28,35 @@ export default function Review({ handleBack, allStepCompleted, handleNext }) {
     const dispatch = useDispatch();
     // USER DATA
     const userData = useSelector((state) => state.auth.userData);
+
     // PRODUCT IN CART
     const products = JSON.parse(localStorage.getItem("selectedProducts"));
+
     // SHIPPING METHOD
     const shipping = useSelector(
         (state) => state.shippingPayment.selectedShippingOption,
     );
+
     // PAYMENT METHOD
     const payment = useSelector(
         (state) => state.shippingPayment.selectedPaymentMethod,
     );
+
     // NOTE FOR THIS ORDER
     const note = useSelector((state) => state.notes.note);
+
     // CUSTOMER INFO AFTER CHANGE
     const customerInfo = useSelector((state) => state.notes.address);
+
     let userId;
     if (userData) userId = userData.id;
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    });
+
     // LIST ORDER ITEMS
     const orderItems = products.map((item) => ({
         product: item.productId._id,
         quantity: item.quantity,
     }));
+
     // LIST PRODUCTS ID TO REMOVE AFTER CREATE ORDER
     const productIds = orderItems.map((item) => item.product);
 
@@ -59,6 +65,7 @@ export default function Review({ handleBack, allStepCompleted, handleNext }) {
     const handleOptionPaymentChange = (method) => {
         setMethod(method);
     };
+
     // HANDLE CONFIRM ORDER WITH COD PAYMENT METHOD
     const handleConfirmOrder = async () => {
         const newOrder = {
@@ -75,7 +82,7 @@ export default function Review({ handleBack, allStepCompleted, handleNext }) {
             shipping: shipping,
             payment: payment,
             note: note,
-            dateOrdered: Date.now,
+            dateOrdered: Date.now(),
         };
         try {
             const res = await axios.post(`${API_PUBLIC_URL}orders`, newOrder);
@@ -118,6 +125,7 @@ export default function Review({ handleBack, allStepCompleted, handleNext }) {
             console.error("Error creating order:", error.message);
         }
     };
+
     // const handleRemoveProduct = async (productId) => {
     //     const product = {
     //         userId: userId,
@@ -159,15 +167,60 @@ export default function Review({ handleBack, allStepCompleted, handleNext }) {
                 shipping: shipping,
                 payment: "VNPAY",
                 note: note,
-                dateOrdered: Date.now,
+                dateOrdered: Date.now(),
             };
             const res = await axios.post(
                 `${API_PUBLIC_URL}vnpay/payment`,
                 newPayment,
             );
+
             if (res.status === 200) {
                 // console.log(newOrder);
                 window.location.href = res.data;
+                try {
+                    const res = await axios.post(
+                        `${API_PUBLIC_URL}orders`,
+                        newOrder,
+                    );
+                    const order = res.data;
+                    // console.log("Order createed: ", order);
+                    localStorage.setItem("newOrder", order._id);
+
+                    // handle remove products in cart
+                    try {
+                        const res = await axios.post(
+                            `${API_PUBLIC_URL}carts/delete/${userId}`,
+                            productIds,
+                        );
+                        const updatedProducts = products.filter(
+                            (item) =>
+                                !productIds.includes(
+                                    item.productId._id.toHexString(),
+                                ),
+                        );
+
+                        localStorage.setItem(
+                            "selectedProducts",
+                            JSON.stringify(updatedProducts),
+                        );
+                        console.log(res.data);
+                    } catch (error) {
+                        console.log("Error remove products from cart: ", error);
+                    }
+                    dispatch(fetchCart(userId));
+
+                    // handle reload note
+                    dispatch(updateNote(""));
+                    dispatch(saveNote(""));
+
+                    // handle reload shipping option
+                    dispatch(setShippingOption(""));
+                    // handle reload payment method
+                    dispatch(setPaymentMethod(""));
+                    // window.location.href = "/ordersuccessful";
+                } catch (error) {
+                    console.error("Error creating order:", error.message);
+                }
             }
             console.log(res);
         } catch (error) {
@@ -175,13 +228,28 @@ export default function Review({ handleBack, allStepCompleted, handleNext }) {
         }
     };
     return (
-        <Container>
+        <Container className="mgpd0">
             {/* Shipping to */}
-            <Stack className="flex-space-between" direction={"row"} spacing={5}>
-                <div className="mg40">
+            <Stack
+                className="flex-space-between "
+                direction={"row"}
+                spacing={5}
+            >
+                <Card
+                    className="non-box-shadow"
+                    style={{
+                        margin: 20,
+                    }}
+                >
                     <Summary />
-                </div>
-                <Stack>
+                </Card>
+                <Card
+                    className="non-box-shadow"
+                    style={{
+                        margin: 20,
+                        padding: 20,
+                    }}
+                >
                     <div>
                         <div className="">
                             <div className="mg20">
@@ -457,7 +525,7 @@ export default function Review({ handleBack, allStepCompleted, handleNext }) {
                             </FormControl>
                         </div>
                     </Stack>
-                </Stack>
+                </Card>
             </Stack>
             {/* Payment method */}
 

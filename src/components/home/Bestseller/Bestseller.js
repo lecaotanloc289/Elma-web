@@ -16,34 +16,39 @@ import { formattedNumber } from "../../../utils/appService";
 import { addToCart } from "../../../redux/actions/cartAction";
 import { useNavigate } from "react-router-dom";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import { favoriteProduct } from "../../../redux/thunk";
 
 const Bestseller = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const products = useSelector((state) => state.data.products);
     const userData = useSelector((state) => state.auth.userData);
-    let userId;
-    if (userData) {
-        userId = userData.id;
-    }
+    const products = useSelector((state) => state.data.products);
+    const userId = userData?.id;
     const bestSellerProduct = products.filter(
         (product) => product.isBestSeller,
     );
-
     // alert notify add product success
     const [open, setOpen] = useState(false);
-    const handleAddToCart = async (productId) => {
-        const product = {
-            userId: userId,
-            productId: productId,
-            quantity: 1,
-        };
-        console.log(product);
-        await dispatch(addToCart(product));
-        setOpen(true);
-        setTimeout(() => {
-            setOpen(false);
-        }, 3000);
+    const handleAddToCart = (productId) => {
+        if (userId !== undefined) {
+            const product = {
+                userId: userId,
+                productId: productId,
+                quantity: 1,
+            };
+            dispatch(addToCart(product));
+            setOpen(true);
+            setTimeout(() => {
+                setOpen(false);
+            }, 3000);
+        } else {
+            navigate("/signin");
+        }
+    };
+    const handleFavorite = (productId) => {
+        if (userId !== undefined) {
+            favoriteProduct(userId, productId);
+        } else navigate("/signin");
     };
     return (
         <Container className="bestseller" maxWidth="lg">
@@ -88,7 +93,12 @@ const Bestseller = () => {
                                             <div className="csale">
                                                 <p className="sale h9">SALE</p>
                                             </div>
-                                            <IconButton className="heart">
+                                            <IconButton
+                                                onClick={() =>
+                                                    handleFavorite(item._id)
+                                                }
+                                                className="heart"
+                                            >
                                                 <Favorite />
                                             </IconButton>
                                         </Stack>
