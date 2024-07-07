@@ -1,6 +1,6 @@
 // const API_PUBLIC_URL = "https://elma-api.onrender.com/api/v1/";
 // const API_PUBLIC_URL = "http://0.tcp.ap.ngrok.io:12336/api/v1/";
-const API_PUBLIC_URL = "http://localhost:8080/api/v1/";
+const API_PUBLIC_URL = "https://elma-backend.onrender.com/api/v1/";
 
 export const apiUser = `${API_PUBLIC_URL}users`;
 export const apiProduct = `${API_PUBLIC_URL}products`;
