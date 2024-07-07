@@ -22,6 +22,16 @@ export function CartRoute() {
             component: <CartBody handleComplete={() => handleComplete()} />,
         },
         {
+            label: "Customer Information",
+            component: (
+                <CartCustomerInfo
+                    data={userData}
+                    handleBack={() => handleBack()}
+                    handleComplete={() => handleComplete()}
+                />
+            ),
+        },
+        {
             label: "Shipping ",
             component: (
                 <ShippingPayment
@@ -32,16 +42,7 @@ export function CartRoute() {
                 />
             ),
         },
-        {
-            label: "Customer Information",
-            component: (
-                <CartCustomerInfo
-                    data={userData}
-                    handleBack={() => handleBack()}
-                    handleComplete={() => handleComplete()}
-                />
-            ),
-        },
+        
 
         {
             label: "Review",
@@ -86,9 +87,9 @@ export function CartRoute() {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    // const handleStep = (step) => () => {
-    //     setActiveStep(step);
-    // };
+    const handleStep = (step) => () => {
+        setActiveStep(step);
+    };
 
     const handleComplete = () => {
         const newCompleted = completed;

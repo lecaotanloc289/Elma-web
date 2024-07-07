@@ -8,6 +8,7 @@ import {
 } from "./reducers/reducers";
 import {
     cartReducer,
+    goshipReducer,
     notesReducer,
     shippingPaymentReducer,
 } from "./reducers/cartReducer";
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
     cart: cartReducer,
     notes: notesReducer,
     shippingPayment: shippingPaymentReducer,
+    goship: goshipReducer,
     // add more readucer
 });
 const store = createStore(rootReducer, loadElmaState, applyMiddleware(thunk));

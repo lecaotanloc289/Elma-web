@@ -8,10 +8,15 @@ import { fetchCart, removeFromCart } from "../../redux/actions/cartAction";
 export default function Summary() {
     const dispatch = useDispatch();
     const products = JSON.parse(localStorage.getItem("selectedProducts"));
-    const total = products.reduce((total, product) => {
+    const selectedShippingOption = useSelector(
+        (state) => state.shippingPayment.selectedShippingOption,
+    );
+    let total = products.reduce((total, product) => {
         return total + product.productId.price * product.quantity;
     }, 0);
 
+    
+    // if (selectedShippingOption) total += selectedShippingOption?.total_fee;
     // get user data from store
     const userData = useSelector((state) => state.auth.userData);
     let userId;
@@ -105,7 +110,11 @@ export default function Summary() {
                     <div className="flex-row flex-space-between">
                         <p className="h7 regular dark-lightest95">Shipping</p>
                         <p className="h7 regular dark-title">
-                            {formattedNumber(0)}
+                            {selectedShippingOption
+                                ? formattedNumber(
+                                      selectedShippingOption?.total_fee,
+                                  )
+                                : formattedNumber(0)}
                             {/* {formattedNumber(0.005 * total)} */}
                         </p>
                     </div>

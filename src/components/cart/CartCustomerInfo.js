@@ -1,19 +1,28 @@
 import {
+    Box,
     Card,
     Checkbox,
     Divider,
+    FormControl,
     FormControlLabel,
     InputBase,
+    Select,
+    MenuItem,
     Stack,
     TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { OrderSummary } from "./OrderSummary";
 import { message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { saveAddress } from "../../redux/actions/cartAction";
+import {
+    getCities,
+    getDistricts,
+    saveAddress,
+} from "../../redux/actions/cartAction";
 import axios from "axios";
 import { API_PUBLIC_URL } from "../../utils/config";
+import { fetchUserData } from "../../redux/thunk";
 export function CartCustomerInfo({ data, handleBack, handleComplete }) {
     const userData = useSelector((state) => state.auth.userData);
     const dispatch = useDispatch();
@@ -44,9 +53,71 @@ export function CartCustomerInfo({ data, handleBack, handleComplete }) {
             if (res.status === 200) {
                 message.success("Save new address success!");
                 // fetch lại data người dùng.
+                await fetchUserData(userId);
             }
         }
     };
+    const [listCities, setListCities] = useState([]);
+    const [listDistricts, setListDistricts] = useState([]);
+    const [citySelected, setCitySelected] = useState([]);
+    const [districtSelected, setDistrictSelected] = useState([]);
+    const goshipToken = useSelector((state) => state.goship.token);
+    useEffect(() => {
+        const fetchCities = async () => {
+            try {
+                const cities = await getCities(goshipToken);
+                if (cities?.data && country) {
+                    setListCities(cities.data);
+                } else {
+                    console.error("Failed to fetch cities!");
+                }
+            } catch (error) {
+                console.error("Error fetching cities:", error);
+            }
+        };
+
+        if (listCities.length === 0 && goshipToken) {
+            fetchCities();
+        }
+    }, [goshipToken, listCities]);
+
+    const handleCitySelected = async (event) => {
+        const selectedCityId = event.target.value;
+        const selectedCity = listCities.filter(
+            (item) => selectedCityId === item.id,
+        );
+        // console.log(selectedCityId);
+        setCitySelected(selectedCity?.[0]);
+        try {
+            const districts = await getDistricts(selectedCityId, goshipToken);
+            // console.log(districts.data);
+            setListDistricts(districts.data);
+        } catch (error) {
+            console.error("Error fetching districts:", error);
+        }
+    };
+
+    const handleDistrictSelected = (event) => {
+        const selectedDistrictId = event.target.value;
+        // console.log(selectedDistrictId);
+        const selectedDistrict = listDistricts.filter(
+            (item) => selectedDistrictId === item.id,
+        );
+        const choose = selectedDistrict?.[0];
+        console.log(choose);
+        setDistrictSelected(choose);
+    };
+    useEffect(() => {
+        setCountry(citySelected?.name);
+        setCity(districtSelected?.name);
+        const shipTo = JSON.stringify({
+            city: citySelected,
+            district: districtSelected,
+        });
+        localStorage.setItem("shipTo", shipTo);
+    }, [districtSelected]);
+    console.log(data.country);
+    console.log(data.city);
     return (
         <div className="flex-space-between mg40">
             <Card
@@ -115,9 +186,9 @@ export function CartCustomerInfo({ data, handleBack, handleComplete }) {
                             </Stack>
                         </Stack>
                     </Stack>
-                    <Stack spacing={6} direction={"row"}>
+                    {/* <Stack spacing={6} direction={"row"}>
                         <Stack spacing={1}>
-                            <p className="h8 regular dark-title">Country</p>
+                            <p className="h8 regular dark-title">Province / City</p>
                             <TextField
                                 className="input firstname"
                                 variant="outlined"
@@ -127,7 +198,7 @@ export function CartCustomerInfo({ data, handleBack, handleComplete }) {
                             ></TextField>
                         </Stack>
                         <Stack spacing={1}>
-                            <p className="h8 regular dark-lighter5a">City</p>
+                            <p className="h8 regular dark-lighter5a">District</p>
                             <TextField
                                 className="input city"
                                 variant="outlined"
@@ -136,7 +207,75 @@ export function CartCustomerInfo({ data, handleBack, handleComplete }) {
                                 onChange={(e) => setCity(e.target.value)}
                             ></TextField>
                         </Stack>
-                    </Stack>
+                    </Stack> */}
+
+                    <div>
+                        {listCities ? (
+                            <Box sx={{ minWidth: 120 }}>
+                                <FormControl fullWidth>
+                                    <p className="h8 regular dark-lighter5a">
+                                        Province / City
+                                    </p>
+                                    <Select
+                                        // value={country}
+                                        onChange={handleCitySelected}
+                                    >
+                                        {listCities.map((item) => (
+                                            <MenuItem value={item.id}>
+                                                <span
+                                                    className="input"
+                                                    style={{
+                                                        fontSize: 16,
+                                                        height: 40,
+                                                    }}
+                                                >
+                                                    {item.name}
+                                                </span>
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Box>
+                        ) : (
+                            <div>
+                                <MenuItem>City</MenuItem>
+                            </div>
+                        )}
+                    </div>
+
+                    <div>
+                        {listDistricts ? (
+                            <Box sx={{ minWidth: 120 }}>
+                                <FormControl fullWidth>
+                                    <p className="h8 regular dark-lighter5a">
+                                        District
+                                    </p>
+                                    <Select
+                                        // value={districtSelected?.[0]?.id}
+                                        onChange={handleDistrictSelected}
+                                    >
+                                        {listDistricts.map((item) => (
+                                            <MenuItem value={item.id}>
+                                                <span
+                                                    className="input"
+                                                    style={{
+                                                        fontSize: 16,
+                                                        height: 40,
+                                                    }}
+                                                >
+                                                    {item.name}
+                                                </span>
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Box>
+                        ) : (
+                            <div>
+                                <MenuItem>District</MenuItem>
+                            </div>
+                        )}
+                    </div>
                     <div>
                         <p className="h8 regular dark-lighter5a">
                             Address details

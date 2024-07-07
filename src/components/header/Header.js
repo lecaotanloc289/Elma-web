@@ -64,6 +64,13 @@ export default function Header() {
         else navigate(`/search?key=${search}`);
     };
 
+    // Press enter to search product
+    const pressEnterToSearch = async (event) => {
+        if (event.key === "Enter") {
+            navigate(`/search?key=${search}`);
+        }
+    };
+
     // get cart quantity
     const cart = useSelector((state) => state.cart);
     let quantity;
@@ -85,6 +92,7 @@ export default function Header() {
                         <TextField
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="search-field"
+                            onKeyDown={pressEnterToSearch}
                         ></TextField>
                         <Button
                             className="search-button "

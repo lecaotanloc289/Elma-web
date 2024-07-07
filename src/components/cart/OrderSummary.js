@@ -98,13 +98,12 @@ export function OrderSummary({ handleBack, handleComplete }) {
                             {formattedNumber(total)}
                         </p>
                     </div>
-                    <div className="flex-row flex-space-between">
+                    {/* <div className="flex-row flex-space-between">
                         <p className="h7 regular dark-lightest95">Shipping</p>
                         <p className="h7 regular dark-title">
                             {formattedNumber(0)}
-                            {/* {formattedNumber(0.005 * total)} */}
                         </p>
-                    </div>
+                    </div> */}
                     <div className="flex-row flex-space-between">
                         <p className="h7 regular dark-lightest95">
                             Discount {discount}%
@@ -126,7 +125,7 @@ export function OrderSummary({ handleBack, handleComplete }) {
                     className="button-contained"
                 >
                     {/* <img src={icons.Shipping_white} alt="" /> */}
-                    <p className="normal h7 medium white">Review</p>
+                    <p className="normal h7 medium white">Shipping</p>
                 </Button>
                 <Button
                     onClick={handleBack}

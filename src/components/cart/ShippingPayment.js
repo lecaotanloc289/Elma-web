@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     Button,
     Card,
@@ -6,24 +6,50 @@ import {
     FormControl,
     Radio,
     RadioGroup,
+    Skeleton,
     Stack,
 } from "@mui/material";
 import icons from "../../assets/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { setShippingOption } from "../../redux/actions/cartAction";
-import { shipping } from "../../utils/shipping";
+import {
+    getGoshipRates,
+    setShippingOption,
+} from "../../redux/actions/cartAction";
 import Summary from "./Sumary";
 import { message } from "antd";
+import { formattedNumber } from "../../utils/appService";
 export default function ShippingPayment({ handleBack, handleComplete }) {
-    // SELECTED SHIPPING AND PAYMENT METHOD TO RERENDER
+    const [shippingRates, setShippingRates] = useState(null);
     const dispatch = useDispatch();
+
     const selectedShippingOption = useSelector(
         (state) => state.shippingPayment.selectedShippingOption,
     );
     const handleOptionShippingChange = (option) => {
+        console.log(option);
         dispatch(setShippingOption(option));
     };
+    // data get from cart customer info
+    const shipTo = JSON.parse(localStorage.getItem("shipTo"));
+    // console.log(shipTo);
+    const products = JSON.parse(localStorage.getItem("selectedProducts"));
 
+    // GOSHIP API INTEGRETED
+    const goshipToken = useSelector((state) => state.goship.token);
+    // console.log(goshipToken);
+    // const rates = getGoshipRates(goshipToken);
+    // console.log(rates.data?.data);
+    useEffect(() => {
+        (async () => {
+            const rates = await getGoshipRates(goshipToken, shipTo, products);
+            if (rates) {
+                console.log(rates);
+                setShippingRates(rates);
+            } else console.log("Failed to fetch rates!");
+        })();
+    }, [goshipToken]);
+    const skeletonShipItems = Array.from({ length: 4 });
+    console.log(shippingRates);
     return (
         <Container className="mgpd0">
             {/* Choose Shipping Service & Payment with... */}
@@ -51,61 +77,133 @@ export default function ShippingPayment({ handleBack, handleComplete }) {
                         <FormControl>
                             <RadioGroup defaultValue={0}>
                                 <Stack direction={"row"} spacing={25}>
-                                    <Stack spacing={4}>
-                                        {shipping
-                                            .map((item, index) => (
-                                                <Stack
-                                                    key={index}
-                                                    direction={"row"}
-                                                    spacing={1}
-                                                    className="center"
-                                                    style={{
-                                                        cursor: "pointer",
-                                                    }}
-                                                >
-                                                    <Stack direction={"row"}>
-                                                        <Radio
-                                                            size="large"
-                                                            value={item.id}
-                                                            checked={
-                                                                selectedShippingOption?.id ===
-                                                                item.id
-                                                            }
-                                                            onClick={() =>
-                                                                handleOptionShippingChange(
-                                                                    item,
-                                                                )
-                                                            }
-                                                        />
-                                                        <div>
-                                                            <p className="h6 medium green">
-                                                                {item.brand}
-                                                            </p>
-                                                            <p className="h8 regular dark-lightest95">
-                                                                {
-                                                                    item.time_express
+                                    <Stack spacing={1}>
+                                        {shippingRates !== null ? (
+                                            shippingRates?.data?.map(
+                                                (item, index) => (
+                                                    <Stack
+                                                        key={index}
+                                                        direction={"row"}
+                                                        spacing={1}
+                                                        className="center"
+                                                        style={{
+                                                            cursor: "pointer",
+                                                            display: "flex",
+                                                            justifyContent:
+                                                                "space-between",
+                                                        }}
+                                                    >
+                                                        <Stack
+                                                            direction={"row"}
+                                                        >
+                                                            <Radio
+                                                                size="large"
+                                                                value={item?.id}
+                                                                checked={
+                                                                    selectedShippingOption?.id ===
+                                                                    item.id
                                                                 }
-                                                            </p>
-                                                        </div>
-                                                    </Stack>
-                                                    <div className="flex-row">
+                                                                onClick={() =>
+                                                                    handleOptionShippingChange(
+                                                                        item,
+                                                                    )
+                                                                }
+                                                            />
+                                                            <div>
+                                                                <p className="h6 medium green">
+                                                                    {
+                                                                        item?.carrier_name
+                                                                    }
+                                                                </p>
+                                                                <p className="h8 regular dark-lightest95">
+                                                                    {
+                                                                        item?.expected
+                                                                    }
+                                                                </p>
+                                                            </div>
+                                                        </Stack>
+                                                        <Stack
+                                                            spacing={2}
+                                                            className=""
+                                                        >
+                                                            <div className="flex-row">
+                                                                <img
+                                                                    height={20}
+                                                                    src={
+                                                                        icons.Dollar
+                                                                    }
+                                                                    alt=""
+                                                                />
+                                                                <p className="h7 medium green">
+                                                                    {formattedNumber(
+                                                                        item?.total_fee,
+                                                                    )}
+                                                                </p>
+                                                            </div>
+                                                        </Stack>
                                                         <img
-                                                            height={20}
-                                                            src={icons.Dollar}
+                                                            width={100}
+                                                            src={
+                                                                item?.carrier_logo
+                                                            }
                                                             alt=""
                                                         />
-                                                        <p className="h7 medium green">
-                                                            Free Shipping
-                                                        </p>
-                                                    </div>
-                                                    <img
-                                                        width={100}
-                                                        src={item.image}
-                                                        alt=""
-                                                    />
-                                                </Stack>
-                                            ))
-                                            .slice(0, 6)}
+                                                    </Stack>
+                                                ),
+                                            )
+                                        ) : (
+                                            <Stack spacing={3}>
+                                                {skeletonShipItems.map(
+                                                    (item) => (
+                                                        <Stack
+                                                            direction="row"
+                                                            spacing={2}
+                                                            minWidth={200}
+                                                            className="flex-center center"
+                                                        >
+                                                            <Skeleton
+                                                                variant="circular"
+                                                                width={20}
+                                                                height={20}
+                                                            />
+                                                            <div>
+                                                                <Skeleton
+                                                                    variant="text"
+                                                                    width={150}
+                                                                    height={30}
+                                                                />
+                                                                <Skeleton
+                                                                    variant="text"
+                                                                    width={200}
+                                                                    height={15}
+                                                                />
+                                                            </div>
+                                                            <Stack
+                                                                direction="row"
+                                                                spacing={2}
+                                                                className="flex center"
+                                                            >
+                                                                <Skeleton
+                                                                    variant="circular"
+                                                                    width={20}
+                                                                    height={20}
+                                                                />
+                                                                <Skeleton
+                                                                    variant="text"
+                                                                    width={150}
+                                                                    height={30}
+                                                                />
+                                                            </Stack>
+                                                            <Skeleton
+                                                                variant="rounded"
+                                                                width={80}
+                                                                height={80}
+                                                            />
+                                                        </Stack>
+                                                    ),
+                                                )}
+                                            </Stack>
+                                        )}
                                     </Stack>
                                     <Summary />
                                 </Stack>

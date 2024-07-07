@@ -17,6 +17,7 @@ import PageNotFound from "./components/404PageNotFound";
 import Products from "./components/search/Products";
 import Slide from "./components/Slide/Slide";
 import SignUp from "./components/register/SignUp";
+import Chat from "./components/chat/Chat";
 function App() {
     return (
         <Provider store={store}>
@@ -40,6 +41,7 @@ function App() {
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/user" element={<User />} />
                     <Route path="/slide" element={<Slide />} />
+                    <Route path="/chat" element={<Chat />} />
                     <Route path="/" element={<Home />} />
                 </Routes>
             </Router>

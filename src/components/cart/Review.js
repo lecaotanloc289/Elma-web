@@ -24,6 +24,7 @@ import {
 } from "../../redux/actions/cartAction";
 import Summary from "./Sumary";
 import { message } from "antd";
+import { formattedNumber } from "../../utils/appService";
 export default function Review({ handleBack, allStepCompleted, handleNext }) {
     const dispatch = useDispatch();
     // USER DATA
@@ -126,23 +127,6 @@ export default function Review({ handleBack, allStepCompleted, handleNext }) {
         }
     };
 
-    // const handleRemoveProduct = async (productId) => {
-    //     const product = {
-    //         userId: userId,
-    //         productId: productId,
-    //     };
-
-    //     const updatedProducts = products.filter(
-    //         (product) => product.productId._id !== productId,
-    //     );
-
-    //     localStorage.setItem(
-    //         "selectedProducts",
-    //         JSON.stringify(updatedProducts),
-    //     );
-
-    //     await dispatch(removeFromCart(product));
-    // };
     const total = products.reduce((total, product) => {
         return total + product.productId.price * product.quantity;
     }, 0);
@@ -239,6 +223,7 @@ export default function Review({ handleBack, allStepCompleted, handleNext }) {
                     className="non-box-shadow"
                     style={{
                         margin: 20,
+                        padding: 40,
                     }}
                 >
                     <Summary />
@@ -254,7 +239,16 @@ export default function Review({ handleBack, allStepCompleted, handleNext }) {
                         <div className="">
                             <div className="mg20">
                                 <p className="h5 medium dark-title">
-                                    Shipping to...
+                                    Shipping to{" "}
+                                    {customerInfo ? (
+                                        <span>
+                                            {customerInfo?.city +
+                                                " - " +
+                                                customerInfo?.country}
+                                        </span>
+                                    ) : (
+                                        <span>...</span>
+                                    )}
                                 </p>
                                 <p className="h8 regular dark-lightest95 mg10">
                                     Please check berofe you finalize your order
@@ -307,13 +301,13 @@ export default function Review({ handleBack, allStepCompleted, handleNext }) {
                                                         </p>
                                                     </div>
                                                 </div>
-                                                <IconButton>
+                                                {/* <IconButton>
                                                     <img
                                                         src={icons.Edit}
                                                         alt=""
                                                     />
                                                     <p>Edit info</p>
-                                                </IconButton>
+                                                </IconButton> */}
                                             </div>
                                         </Stack>
                                     </Stack>
@@ -326,10 +320,10 @@ export default function Review({ handleBack, allStepCompleted, handleNext }) {
                                             <Stack direction={"row"}>
                                                 <div>
                                                     <p className="h6 medium dark-lighter5a">
-                                                        {shipping?.brand}
+                                                        {shipping?.carrier_name}
                                                     </p>
                                                     <p className="h8 regular dark-lightest95">
-                                                        {shipping?.time_express}
+                                                        {shipping?.expected}
                                                     </p>
                                                 </div>
                                             </Stack>
@@ -343,12 +337,14 @@ export default function Review({ handleBack, allStepCompleted, handleNext }) {
                                                     alt=""
                                                 />
                                                 <p className="h7 medium dark-lighter5a">
-                                                    Free Shipping
+                                                    {formattedNumber(
+                                                        shipping?.total_fee,
+                                                    )}
                                                 </p>
                                             </Stack>
                                             <img
                                                 width={120}
-                                                src={shipping?.image}
+                                                src={shipping?.carrier_logo}
                                                 alt=""
                                             />
                                         </Stack>
@@ -374,11 +370,6 @@ export default function Review({ handleBack, allStepCompleted, handleNext }) {
                                 <p className="h5 medium dark-title">
                                     Payment method
                                 </p>
-                                <Button variant="text">
-                                    <p className="normal h8 regular indigo mg10">
-                                        Change method
-                                    </p>
-                                </Button>
                             </div>
 
                             <FormControl>

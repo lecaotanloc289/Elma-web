@@ -129,7 +129,7 @@ export function CartBody({ handleComplete }) {
 
     // SELECT & SELECT ALL PRODUCT
     const [selectedProducts, setSelectedProducts] = useState(
-        storedSelectedProducts?.map((product) => product.productId._id),
+        storedSelectedProducts?.map((product) => product.productId._id) || [],
     );
     const [selectAll, setSelectAll] = useState(
         storedSelectedProducts?.length === products.length,
@@ -138,6 +138,7 @@ export function CartBody({ handleComplete }) {
     // checkbox change state
     const handleCheckboxChange = (productId) => {
         setSelectedProducts((prevState) => {
+            prevState = prevState || []; // Ensure prevState is an array
             if (prevState.includes(productId)) {
                 return prevState.filter((id) => id !== productId);
             } else {
@@ -200,6 +201,9 @@ export function CartBody({ handleComplete }) {
     // get note and render
     const note = useSelector((state) => state.notes.note);
 
+    // GET GOSHIP TOKEN
+    const goshipToken = useSelector((state) => state.goship.token);
+    // console.log(goshipToken);
     return (
         <Container maxWidth="lg">
             {/* NOTIFICATION ADD CART */}

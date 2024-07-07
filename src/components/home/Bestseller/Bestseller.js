@@ -6,7 +6,7 @@ import {
     Snackbar,
     Stack,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import "./Bestseller.scss";
 import { Favorite, ShoppingCart, Visibility } from "@mui/icons-material";
@@ -17,6 +17,7 @@ import { addToCart } from "../../../redux/actions/cartAction";
 import { useNavigate } from "react-router-dom";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { favoriteProduct } from "../../../redux/thunk";
+import axios from "axios";
 
 const Bestseller = () => {
     const navigate = useNavigate();
@@ -50,6 +51,7 @@ const Bestseller = () => {
             favoriteProduct(userId, productId);
         } else navigate("/signin");
     };
+
     return (
         <Container className="bestseller" maxWidth="lg">
             <Snackbar

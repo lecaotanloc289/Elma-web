@@ -34,9 +34,12 @@ function Tools() {
             >
                 <p className="h7 regular">Order tracking</p>
             </div>
-            <a href="#help">
+            <div
+                onClick={() => navigate("/chat")}
+                style={{ cursor: "pointer" }}
+            >
                 <p className="h7 regular">Help</p>
-            </a>
+            </div>
 
             <div className="flex-row">
                 <img className="image-language" src={logo.Vietnam} alt="" />

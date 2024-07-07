@@ -51,7 +51,7 @@ function OrderTracking() {
     if (userData) userId = userData.id;
 
     const [orders, setOrders] = useState(null);
-    console.log(orders);
+    // console.log(orders);
 
     useEffect(() => {
         if (userId === undefined) navigate("/signin");
@@ -60,7 +60,7 @@ function OrderTracking() {
                 const response = await axios.get(
                     `${API_PUBLIC_URL}orders/${userId}`,
                 );
-                console.log(response.data);
+                // console.log(response.data);
                 setOrders(response.data);
             } catch (error) {
                 console.log("Get orders by user id error: ", error);
@@ -288,9 +288,6 @@ function YourPackageIn(orders) {
 
 function InsidePackage(orders) {
     const orderDetail = orders.orders;
-
-    console.log(orderDetail);
-
     const total = orderDetail.orderItems.reduce((total, product) => {
         return total + product.quantity * product.product.price;
     }, 0);

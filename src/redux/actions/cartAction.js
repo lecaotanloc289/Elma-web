@@ -4,6 +4,7 @@ import {
     ADD_TO_CART,
     DECREASE_QUANTITY_SUCCESS,
     FETCH_DATA_FROM_CART,
+    GET_GOSHIP_TOKEN,
     INCREASE_QUANTITY_SUCCESS,
     REMOVE_FROM_CART,
     SET_CUSTOMER_ADDRESS,
@@ -73,11 +74,6 @@ export const fetchCart = (id) => {
     };
 };
 export const addToCart = (product) => {
-    // {
-    //     "userId": "65c2091dc3e076cc6ae53dc2",
-    //     "productId": "65db0b69f08a93058c07f04f",
-    //     "quantity": 1
-    // }
     return async (dispatch) => {
         try {
             const response = await axios.post(
@@ -156,5 +152,95 @@ export const handleRemoveProducts = async (userId, productIds) => {
         console.log(res.data);
     } catch (error) {
         console.log("Error remove products from cart: ", error);
+    }
+};
+
+// GOSHIP TOKEN
+export const goshipToken = (token) => ({
+    type: GET_GOSHIP_TOKEN,
+    payload: token,
+});
+
+export const getGoshipToken = async (dispatch) => {
+    try {
+        const response = await axios.get(`${API_PUBLIC_URL}goship/login`);
+        if (response.status === 200) {
+            dispatch(goshipToken(response.data));
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getGoshipRates = async (token, to, parcel) => {
+    const productNumber = parcel?.length;
+    const total = parcel?.reduce((total, product) => {
+        return total + product.productId.price * product.quantity;
+    }, 0);
+    // console.log(productNumber, total);
+    // token, from, to, parcel
+    const data = {
+        token: token,
+        from: {
+            district: 701400,
+            city: 700000,
+        },
+        to: {
+            district: to?.district?.id,
+            city: to?.city?.id,
+        },
+        parcel: {
+            cod: total,
+            amount: total,
+            width: productNumber * 10,
+            height: productNumber * 10,
+            length: productNumber * 10,
+            weight: productNumber * 750,
+        },
+    };
+    // console.log(data);
+    try {
+        const response = await axios.post(
+            `${API_PUBLIC_URL}goship/rates`,
+            data,
+        );
+        if (response.status === 200) {
+            return response.data;
+        }
+        return null;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+};
+
+export const getCities = async (token) => {
+    try {
+        const response = await axios.post(`${API_PUBLIC_URL}goship/cities`, {
+            token,
+        });
+        if (response.status === 200) {
+            return response?.data;
+        }
+        return null;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+};
+
+export const getDistricts = async (cityCode, token) => {
+    try {
+        const response = await axios.post(`${API_PUBLIC_URL}goship/districts`, {
+            cityCode,
+            token,
+        });
+        if (response.status === 200) {
+            return response?.data;
+        }
+        return null;
+    } catch (error) {
+        console.log(error);
+        return null;
     }
 };

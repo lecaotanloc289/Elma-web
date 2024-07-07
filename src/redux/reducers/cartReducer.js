@@ -2,6 +2,7 @@ import {
     ADD_TO_CART,
     DECREASE_QUANTITY_SUCCESS,
     FETCH_DATA_FROM_CART,
+    GET_GOSHIP_TOKEN,
     INCREASE_QUANTITY_SUCCESS,
     REMOVE_FROM_CART,
     SET_CUSTOMER_ADDRESS,
@@ -12,11 +13,11 @@ import {
 
 const cartReducer = (state = [], action) => {
     switch (action.type) {
-        case FETCH_DATA_FROM_CART:
-            return action.payload;
-
         case ADD_TO_CART:
             return [...state, action.payload];
+
+        case FETCH_DATA_FROM_CART:
+            return action.payload;
 
         case REMOVE_FROM_CART:
             return state.filter((item) => item.id !== action.payload.id);
@@ -86,4 +87,21 @@ const shippingPaymentReducer = (
     }
 };
 
-export { cartReducer, notesReducer, shippingPaymentReducer };
+const initialToken = {
+    token: null,
+};
+
+const goshipReducer = (state = initialToken, action) => {
+    switch (action.type) {
+        case GET_GOSHIP_TOKEN:
+            return {
+                ...state,
+                token: action.payload,
+            };
+
+        default:
+            return state;
+    }
+};
+
+export { cartReducer, notesReducer, shippingPaymentReducer, goshipReducer };

@@ -96,16 +96,19 @@ export default function Favorites() {
                                             alt=""
                                         />
                                     </div>
-                                    <div>
+                                    <Stack minWidth={380}>
                                         <p className="h7 medium dark-title">
                                             {i.name}
                                         </p>
                                         <p className="h8 regular dark-lightest95">
                                             {i.brand}
                                         </p>
-                                    </div>
+                                    </Stack>
                                     <p
-                                        style={{ lineHeight: "32px" }}
+                                        style={{
+                                            lineHeight: "32px",
+                                            minWidth: 110,
+                                        }}
                                         className="h7 medium green product-price"
                                     >
                                         {formattedNumber(i.price)}

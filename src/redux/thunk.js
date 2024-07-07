@@ -51,3 +51,9 @@ export const fetchUserData = async (userId, dispatch) => {
         console.log(error);
     }
 };
+
+export const userChats = (id) => axios.get(`${API_PUBLIC_URL}chats/${id}`);
+export const getUser = (id) => axios.get(`${API_PUBLIC_URL}users/${id}`);
+export const getMessages = (id) => axios.get(`${API_PUBLIC_URL}messages/${id}`);
+export const sendMessage = (message) =>
+    axios.post(`${API_PUBLIC_URL}messages`, message);

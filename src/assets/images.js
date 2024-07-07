@@ -54,4 +54,5 @@ export const images = {
     EmptyCart: require("./images/EmptyCart.png"),
     SlideRegister: require("./images/002.png"),
     SlideSignIn: require("./images/001.png"),
+    Chat: require("./images/chat.png"),
 };

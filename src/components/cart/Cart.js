@@ -1,17 +1,22 @@
 import { ChevronLeftRounded } from "@mui/icons-material";
 import { Button, Container, Stack } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import "./Cart.scss";
 import MainLayout from "../MainLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { CartRoute } from "./CartRoute";
 import { images } from "../../assets/images";
-import { saveNote, updateNote } from "../../redux/actions/cartAction";
+import {
+    getGoshipToken,
+    saveNote,
+    updateNote,
+} from "../../redux/actions/cartAction";
 
 export default function Cart() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    getGoshipToken(dispatch);
 
     // FOR CART BODY
     const cart = useSelector((state) => state.cart);
